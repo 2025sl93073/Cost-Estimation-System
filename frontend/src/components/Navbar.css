@@ -1,0 +1,62 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  background: #1e3a5f;
+  color: #fff;
+  padding: 0 24px;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-right: 32px;
+  white-space: nowrap;
+}
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 4px;
+  flex: 1;
+}
+.navbar-links a {
+  color: #cfd8e8;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.navbar-links a:hover, .navbar-links a.active {
+  background: #2e5c99;
+  color: #fff;
+}
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+.role-badge {
+  background: #e67e22;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.btn-logout {
+  background: transparent;
+  border: 1px solid #cfd8e8;
+  color: #cfd8e8;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+.btn-logout:hover { background: #e74c3c; border-color: #e74c3c; color: #fff; }
