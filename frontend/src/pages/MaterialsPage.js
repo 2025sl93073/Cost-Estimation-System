@@ -3,7 +3,7 @@ import API from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import '../components/Layout.css';
 
-const EMPTY = { name: '', description: '', unit: '', basePricePerUnit: '', category: '' };
+const EMPTY = { name: '', description: '', unit: '', category: '' };
 
 export default function MaterialsPage() {
   const { user } = useAuth();
@@ -18,16 +18,16 @@ export default function MaterialsPage() {
   useEffect(() => { load(); }, []);
 
   const openCreate = () => { setEditing(null); setForm(EMPTY); setError(''); setModal(true); };
-  const openEdit = (m) => { setEditing(m.id); setForm({ ...m }); setError(''); setModal(true); };
+  const openEdit = (m) => { setEditing(m.id); setForm({ name: m.name, description: m.description, unit: m.unit, category: m.category }); setError(''); setModal(true); };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
       if (editing) {
-        await API.put(`/materials/${editing}`, { ...form, basePricePerUnit: parseFloat(form.basePricePerUnit) });
+        await API.put(`/materials/${editing}`, { ...form });
       } else {
-        await API.post('/materials', { ...form, basePricePerUnit: parseFloat(form.basePricePerUnit) });
+        await API.post('/materials', { ...form });
       }
       setModal(false);
       load();
@@ -45,7 +45,7 @@ export default function MaterialsPage() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h2 className="page-title" style={{ margin: 0 }}>Materials (Module 2)</h2>
+        <h2 className="page-title" style={{ margin: 0 }}>Materials</h2>
         {isAdmin && <button className="btn btn-primary" onClick={openCreate}>+ Add Material</button>}
       </div>
       <div className="card" style={{ padding: 0 }}>
@@ -53,7 +53,7 @@ export default function MaterialsPage() {
           <thead>
             <tr>
               <th>#</th><th>Name</th><th>Category</th><th>Unit</th>
-              <th>Base Price</th><th>Latest Price</th><th>Description</th>
+              <th>Description</th>
               {isAdmin && <th>Actions</th>}
             </tr>
           </thead>
@@ -64,8 +64,6 @@ export default function MaterialsPage() {
                 <td>{m.name}</td>
                 <td>{m.category}</td>
                 <td>{m.unit}</td>
-                <td>₹{m.basePricePerUnit?.toLocaleString('en-IN')}</td>
-                <td style={{ fontWeight: 600 }}>₹{m.latestPrice?.toLocaleString('en-IN')}</td>
                 <td>{m.description}</td>
                 {isAdmin && (
                   <td>
@@ -76,7 +74,7 @@ export default function MaterialsPage() {
               </tr>
             ))}
             {materials.length === 0 && (
-              <tr><td colSpan={8} style={{ textAlign: 'center', color: '#aaa' }}>No materials yet</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', color: '#aaa' }}>No materials yet</td></tr>
             )}
           </tbody>
         </table>
@@ -107,14 +105,9 @@ export default function MaterialsPage() {
                   <input required value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} placeholder="kg, bags, sqft..." />
                 </div>
                 <div className="form-group">
-                  <label>Base Price/Unit (₹)</label>
-                  <input required type="number" min="0" step="0.01"
-                    value={form.basePricePerUnit} onChange={(e) => setForm({ ...form, basePricePerUnit: e.target.value })} />
+                  <label>Description</label>
+                  <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
                 </div>
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" className="btn btn-secondary" onClick={() => setModal(false)}>Cancel</button>

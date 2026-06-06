@@ -40,7 +40,7 @@ public class MaterialServiceImpl implements MaterialService {
                 .name(request.getName())
                 .description(request.getDescription())
                 .unit(request.getUnit())
-                .basePricePerUnit(request.getBasePricePerUnit())
+                .basePricePerUnit(0.0)
                 .category(request.getCategory())
                 .build();
         return toResponse(materialRepository.save(material));
@@ -53,7 +53,6 @@ public class MaterialServiceImpl implements MaterialService {
         if (request.getName() != null) m.setName(request.getName());
         if (request.getDescription() != null) m.setDescription(request.getDescription());
         if (request.getUnit() != null) m.setUnit(request.getUnit());
-        if (request.getBasePricePerUnit() != null) m.setBasePricePerUnit(request.getBasePricePerUnit());
         if (request.getCategory() != null) m.setCategory(request.getCategory());
         return toResponse(materialRepository.save(m));
     }
@@ -69,20 +68,17 @@ public class MaterialServiceImpl implements MaterialService {
         Material material = materialRepository.findById(request.getMaterialId())
                 .orElseThrow(() -> new RuntimeException("Material not found"));
 
-        Double prevPrice = materialCostRepository
-                .findLatestByMaterialId(material.getId())
-                .map(MaterialCost::getPrice)
-                .orElse(material.getBasePricePerUnit());
+        material.setBasePricePerUnit(request.getPrice());
+        materialRepository.save(material);
 
-        double fluctuation = prevPrice > 0
-                ? ((request.getPrice() - prevPrice) / prevPrice) * 100
-                : 0;
+        java.time.LocalDate effectiveDate = request.getEffectiveDate() != null
+                ? request.getEffectiveDate()
+                : java.time.LocalDate.now();
 
         MaterialCost cost = MaterialCost.builder()
                 .material(material)
                 .price(request.getPrice())
-                .effectiveDate(request.getEffectiveDate())
-                .fluctuationPercent(fluctuation)
+                .effectiveDate(effectiveDate)
                 .region(request.getRegion())
                 .updatedBy(updatedByUserId)
                 .build();

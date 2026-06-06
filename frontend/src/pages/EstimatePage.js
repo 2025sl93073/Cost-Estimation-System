@@ -60,7 +60,7 @@ export default function EstimatePage() {
 
   return (
     <div>
-      <h2 className="page-title">Cost Estimation (Module 4)</h2>
+      <h2 className="page-title">Cost Estimation</h2>
       <div className="card">
         {error && <div className="alert alert-error">{error}</div>}
         <form onSubmit={handleSubmit}>
@@ -123,7 +123,6 @@ export default function EstimatePage() {
             <tbody>
               <tr><td style={{ color: '#555' }}>Material Cost</td><td style={{ fontWeight: 600 }}>{fmt(result.materialCost)}</td></tr>
               <tr><td style={{ color: '#555' }}>Labour Cost ({result.labourForceCount} workers)</td><td style={{ fontWeight: 600 }}>{fmt(result.labourCost)}</td></tr>
-              <tr><td style={{ color: '#555' }}>Time Surcharge</td><td style={{ fontWeight: 600 }}>{fmt(result.timeFactorCost)}</td></tr>
               <tr><td style={{ color: '#555' }}>Quality Surcharge ({result.qualityFactor}x multiplier)</td><td style={{ fontWeight: 600 }}>{fmt(result.qualityFactorCost)}</td></tr>
               <tr style={{ background: '#eafaf1' }}>
                 <td style={{ fontWeight: 700, fontSize: '1rem' }}>TOTAL COST</td>

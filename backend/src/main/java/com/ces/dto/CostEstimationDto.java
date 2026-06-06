@@ -37,7 +37,6 @@ public class CostEstimationDto {
         private Double materialCost;
         private Double labourCost;
         private Integer labourForceCount;
-        private Double timeFactorCost;
         private Double qualityFactorCost;
         private Double qualityFactor;
         private Double totalCost;

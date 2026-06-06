@@ -29,16 +29,13 @@ public class CostEstimation {
     @Column(name = "labour_force_count")
     private Integer labourForceCount;
 
-    @Column(name = "time_factor_cost")
-    private Double timeFactorCost;
-
     @Column(name = "quality_factor_cost")
     private Double qualityFactorCost;
 
     @Column(name = "total_cost", nullable = false)
     private Double totalCost;
 
-    @Column(name = "estimated_at", updatable = false)
+    @Column(name = "estimated_at")
     private LocalDateTime estimatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +43,8 @@ public class CostEstimation {
     private User estimatedBy;
 
     @PrePersist
-    protected void onCreate() {
+    @PreUpdate
+    protected void onSave() {
         estimatedAt = LocalDateTime.now();
     }
 }

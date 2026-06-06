@@ -22,9 +22,6 @@ public class CostEstimationServiceImpl implements CostEstimationService {
     @Autowired private MaterialRequirementRepository requirementRepository;
     @Autowired private UserRepository userRepository;
 
-    // Labour cost per person per month (base)
-    private static final double LABOUR_RATE_PER_PERSON_PER_MONTH = 15000.0;
-
     @Override
     @Transactional
     public CostEstimationDto.Response estimate(CostEstimationDto.EstimateRequest request, String username) {
@@ -36,6 +33,7 @@ public class CostEstimationServiceImpl implements CostEstimationService {
         // --- Material Cost ---
         double materialCost = 0.0;
         requirementRepository.deleteByProjectId(project.getId());
+        requirementRepository.flush();
         List<MaterialRequirement> requirements = new ArrayList<>();
 
         if (request.getMaterials() != null) {
@@ -61,20 +59,16 @@ public class CostEstimationServiceImpl implements CostEstimationService {
                 * request.getLabourCostPerPerson()
                 * project.getTimeRequiredMonths();
 
-        // --- Time Factor Cost (urgency surcharge) ---
-        double timeFactorCost = (project.getTimeRequiredMonths() <= 6) ? materialCost * 0.10 : 0;
-
         // --- Quality Factor Cost ---
         double qualityFactorCost = (materialCost + labourCost) * (project.getQualityFactor() - 1.0);
 
-        double totalCost = materialCost + labourCost + timeFactorCost + qualityFactorCost;
+        double totalCost = materialCost + labourCost + qualityFactorCost;
 
         CostEstimation estimation = CostEstimation.builder()
                 .project(project)
                 .materialCost(materialCost)
                 .labourCost(labourCost)
                 .labourForceCount(request.getLabourForceCount())
-                .timeFactorCost(timeFactorCost)
                 .qualityFactorCost(qualityFactorCost)
                 .totalCost(totalCost)
                 .estimatedBy(user)
@@ -111,7 +105,7 @@ public class CostEstimationServiceImpl implements CostEstimationService {
         return new CostEstimationDto.Response(
                 e.getId(), e.getProject().getId(), e.getProject().getName(),
                 e.getMaterialCost(), e.getLabourCost(), e.getLabourForceCount(),
-                e.getTimeFactorCost(), e.getQualityFactorCost(), e.getProject().getQualityFactor(),
+                e.getQualityFactorCost(), e.getProject().getQualityFactor(),
                 e.getTotalCost(), e.getEstimatedAt(),
                 e.getEstimatedBy() != null ? e.getEstimatedBy().getUsername() : null);
     }

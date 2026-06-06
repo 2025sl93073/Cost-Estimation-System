@@ -32,7 +32,7 @@ export default function ReportsPage() {
 
   return (
     <div>
-      <h2 className="page-title">Reports (Module 6)</h2>
+      <h2 className="page-title">Reports</h2>
 
       {summary && (
         <div className="stat-grid">
@@ -84,10 +84,10 @@ export default function ReportsPage() {
       </div>
 
       <div className="card">
-        <h3 style={{ marginBottom: 16, color: '#1e3a5f' }}>Cost Estimation Report (Module 5 — Fluctuation)</h3>
+        <h3 style={{ marginBottom: 16, color: '#1e3a5f' }}>Cost Estimation Report</h3>
         <table>
           <thead>
-            <tr><th>#</th><th>Project</th><th>Material Cost</th><th>Labour Cost</th><th>Time Surcharge</th><th>Quality Surcharge</th><th>Quality Factor</th><th>Total Cost</th><th>Estimated By</th><th>Date</th></tr>
+            <tr><th>#</th><th>Project</th><th>Material Cost</th><th>Labour Cost</th><th>Quality Surcharge</th><th>Quality Factor</th><th>Total Cost</th><th>Estimated By</th><th>Date</th></tr>
           </thead>
           <tbody>
             {estimations.map((e, i) => (
@@ -96,7 +96,6 @@ export default function ReportsPage() {
                 <td>{e.projectName}</td>
                 <td>{fmt(e.materialCost)}</td>
                 <td>{fmt(e.labourCost)}</td>
-                <td>{fmt(e.timeFactorCost)}</td>
                 <td>{fmt(e.qualityFactorCost)}</td>
                 <td style={{ textAlign: 'center' }}>{e.qualityFactor}x</td>
                 <td style={{ fontWeight: 700, color: '#27ae60' }}>{fmt(e.totalCost)}</td>
@@ -105,7 +104,7 @@ export default function ReportsPage() {
               </tr>
             ))}
             {estimations.length === 0 && (
-              <tr><td colSpan={9} style={{ textAlign: 'center', color: '#aaa' }}>No estimations yet</td></tr>
+              <tr><td colSpan={8} style={{ textAlign: 'center', color: '#aaa' }}>No estimations yet</td></tr>
             )}
           </tbody>
         </table>

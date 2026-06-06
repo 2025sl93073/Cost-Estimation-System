@@ -15,8 +15,6 @@ public class MaterialDto {
         private String description;
         @NotBlank
         private String unit;
-        @NotNull @Positive
-        private Double basePricePerUnit;
         private String category;
     }
 
@@ -25,8 +23,6 @@ public class MaterialDto {
         private String name;
         private String description;
         private String unit;
-        @Positive
-        private Double basePricePerUnit;
         private String category;
     }
 
@@ -36,7 +32,6 @@ public class MaterialDto {
         private Long materialId;
         @NotNull @Positive
         private Double price;
-        @NotNull
         private LocalDate effectiveDate;
         private String region;
     }

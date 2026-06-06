@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import API from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import '../components/Layout.css';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.get('/reports/summary').then((r) => setStats(r.data)).finally(() => setLoading(false));
-  }, []);
+    if (isAdmin) {
+      API.get('/reports/summary').then((r) => setStats(r.data)).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [isAdmin]);
 
   const statCards = stats
     ? [
@@ -22,10 +29,9 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h2 className="page-title">Dashboard</h2>
-      {loading ? (
-        <p>Loading statistics...</p>
-      ) : (
+      <h2 className="page-title">{isAdmin ? 'Dashboard' : 'About'}</h2>
+      {isAdmin && loading && <p>Loading statistics...</p>}
+      {isAdmin && !loading && (
         <div className="stat-grid">
           {statCards.map((s) => (
             <div className="stat-card" key={s.label} style={{ borderTopColor: s.color }}>
@@ -43,14 +49,6 @@ export default function DashboardPage() {
           update costs, and view full reports. All users can create projects and generate cost estimations
           based on materials, labour force, time, and quality factors.
         </p>
-        <ul style={{ marginTop: 14, paddingLeft: 20, color: '#555', lineHeight: 2 }}>
-          <li>Module 1: Registration / Login</li>
-          <li>Module 2: Material Requirement Data & Updation</li>
-          <li>Module 3: Material Cost Updation</li>
-          <li>Module 4: Cost Estimation</li>
-          <li>Module 5: Cost Fluctuation Tracking</li>
-          <li>Module 6: Reports</li>
-        </ul>
       </div>
     </div>
   );
